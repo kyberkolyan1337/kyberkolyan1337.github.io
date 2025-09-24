@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Даниленков Николай ИС-3.2</title>
+</head>
+<body>
+    <h1>Калькулятор сложения</h1>
+    <button onclick="addNumbers()">Сложить два числа</button>
+    <script>
+    function addNumbers() {
+
+        let n1=prompt("Введите первое число:");
+
+        let n2=prompt("Введите второе число:");
+        
+        let result = parseFloat(n1) + parseFloat(n2);
+
+        alert("Результат: " + n1 + " + " + n2 + " = " + result);
+    }
+
+    </script>
+</body>
+</html>

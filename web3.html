@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Угадай число</title>
+    <link rel="stylesheet" href="web3.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Угадай число</h1>
+        
+        <div class="instructions">
+            <p>Я загадал число от 1 до 100. Попробуй угадать его за минимальное количество попыток!</p>
+            <p>После каждой попытки я скажу, больше или меньше загаданное число.</p>
+        </div>
+        
+        <div class="input-section">
+            <input type="number" id="guessInput" min="1" max="100" placeholder="Введите число от 1 до 100">
+            <button id="guessBtn">Проверить</button>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="attempts">
+            <p>Количество попыток: <span id="attemptCount">0</span></p>
+            <p>Предыдущие попытки: <span id="previousGuesses"></span></p>
+        </div>
+        
+        <button id="newGameBtn">Новая игра</button>
+    </div>
+
+    <script>
+        // Инициализация переменных игры
+        let secretNumber;
+        let attempts;
+        let previousGuesses;
+        
+        // Элементы DOM
+        const guessInput = document.getElementById('guessInput');
+        const guessBtn = document.getElementById('guessBtn');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const message = document.getElementById('message');
+        const attemptCount = document.getElementById('attemptCount');
+        const previousGuessesElement = document.getElementById('previousGuesses');
+        
+        // Функция начала новой игры
+        function startNewGame() {
+            // Генерация случайного числа от 1 до 100
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            previousGuesses = [];
+            
+            // Очистка интерфейса
+            guessInput.value = '';
+            message.textContent = '';
+            message.className = 'message';
+            attemptCount.textContent = '0';
+            previousGuessesElement.textContent = '';
+            
+            // Фокус на поле ввода
+            guessInput.focus();
+            
+            console.log('Загаданное число:', secretNumber); // Для отладки
+        }
+        
+        // Функция обработки попытки угадать
+        function makeGuess() {
+            const guess = parseInt(guessInput.value);
+            
+            // Проверка валидности ввода
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.textContent = 'Пожалуйста, введите число от 1 до 100!';
+                message.className = 'message warning';
+                return;
+            }
+            
+            // Увеличение счетчика попыток
+            attempts++;
+            attemptCount.textContent = attempts;
+            
+            // Добавление попытки в историю
+            previousGuesses.push(guess);
+            previousGuessesElement.textContent = previousGuesses.join(', ');
+            
+            // Проверка угадал ли игрок число
+            if (guess === secretNumber) {
+                message.textContent = `Поздравляю! Вы угадали число ${secretNumber} за ${attempts} попыток!`;
+                message.className = 'message success';
+                guessInput.disabled = true;
+                guessBtn.disabled = true;
+            } else if (guess < secretNumber) {
+                message.textContent = 'Загаданное число больше!';
+                message.className = 'message warning';
+            } else {
+                message.textContent = 'Загаданное число меньше!';
+                message.className = 'message warning';
+            }
+            
+            // Очистка поля ввода
+            guessInput.value = '';
+            guessInput.focus();
+        }
+        
+        // Обработчики событий
+        guessBtn.addEventListener('click', makeGuess);
+        
+        guessInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                makeGuess();
+            }
+        });
+        
+        newGameBtn.addEventListener('click', startNewGame);
+        
+        // Начало игры при загрузке страницы
+        window.addEventListener('load', startNewGame);
+    </script>
+</body>
+</html>
